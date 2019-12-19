@@ -8,6 +8,7 @@ pylint = "*"
 
 [packages]
 aiohttp = {extras = ["speedups"],version = "*"}
+marshmallow = "*"
 webargs = "*"
 ujson = "*"
 
