@@ -20,6 +20,7 @@ from functools import partial
 import ujson
 
 from aiohttp import web
+from marshmallow import Schema
 from webargs import aiohttpparser
 from webargs import dict2schema
 
@@ -81,8 +82,10 @@ def make_route(input_args: dict = None, output_args: dict = None,
     # Prepare dumper for outgoing data
     # if not (isinstance(output_args, dict) or isinstance(output_args, list)):
     #    output_args = {'result': fields.List(fields.Str(), missing=[])}
-
-    dumper = dict2schema(output_args)()
+    if isinstance(output_args, dict):
+        schema = dict2schema(output_args)()
+    else:
+        schema = output_args()
 
     # Checking locations of data
     # for incoming request
@@ -120,20 +123,19 @@ def make_route(input_args: dict = None, output_args: dict = None,
             if isinstance(data, (web.FileResponse, web.WebSocketResponse, web.Response)):
                 return data
 
+            # 1) Validating outgoing data scheme
+            # 2) Serialize verified data
             if data is None:
                 data = {}
             else:
-                if not isinstance(data, tuple):
-                    data = (data,)
+                if isinstance(output_args, dict):
+                    if not isinstance(data, tuple):
+                        data = (data,)
 
-                data = dict(zip(output_args.keys(), data))
+                    data = dict(zip(output_args.keys(), data))
 
-            # 1) Validating outgoing data scheme
-            # 2) Serialize verified data
             return JSON_RESPONSE(
-                dumper.dump(
-                    dumper.load(data).data
-                )
+                schema.dump(data)
             )
 
         # Last thing is dispatch the route of
@@ -157,7 +159,7 @@ def make_route(input_args: dict = None, output_args: dict = None,
 
             # Extract endpoint name
             method_name = __to_camel(fn_.__name__)
-            endpoint_path = "{0}.{1}".format(resource_path, method_name)
+            endpoint_path = "/{0}.{1}".format(resource_path, method_name)
 
         # Add coroutine wrapper inside the webapp
         ROUTE_TABLE.extend(

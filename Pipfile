@@ -5,9 +5,11 @@ verify_ssl = true
 
 [dev-packages]
 pylint = "*"
+rope = "*"
 
 [packages]
 aiohttp = {extras = ["speedups"],version = "*"}
+marshmallow = "*"
 webargs = "*"
 ujson = "*"
 

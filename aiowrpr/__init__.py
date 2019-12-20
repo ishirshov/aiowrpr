@@ -17,3 +17,6 @@ __version__ = '0.0.1b'
 __author__ = 'Ildar Shirshov'
 __license__ = 'Apache 2.0'
 
+from . import routes
+from . import adaptor
+from . import generators
