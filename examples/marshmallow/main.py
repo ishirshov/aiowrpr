@@ -2,10 +2,10 @@
 import aiowrpr
 from aiowrpr import routes
 
-import project
-
 import aiohttp
 from aiohttp import web
+
+import api
 
 
 if __name__ == "__main__":
