@@ -17,7 +17,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip pipenv
         pip install setuptools wheel twine
-        set ex & pipenv install --deploy --system
+        set -ex && pipenv install --deploy --system
     - name: Build and publish
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
