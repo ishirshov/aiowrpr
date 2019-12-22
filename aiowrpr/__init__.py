@@ -13,9 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-__version__ = '0.0.1b'
-__author__ = 'Ildar Shirshov'
-__license__ = 'Apache 2.0'
+__version__ = "0.0.1a"
+__doc__ = """
+"""
+__author__ = "Ildar Shirshov"
+__license__ = "Apache 2.0"
 
 from . import routes
 from . import adaptor
