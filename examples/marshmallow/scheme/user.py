@@ -4,6 +4,6 @@ from marshmallow import Schema
 
 
 class User(Schema):
-    firstname = fields.Str()
-    middlename = fields.Str()
-    lastname = fields.Str()
+    firstname = fields.Str(required=True)
+    middlename = fields.Str(missing=str())
+    lastname = fields.Str(required=True)

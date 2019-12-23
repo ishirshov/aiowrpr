@@ -7,6 +7,18 @@ from scheme import user
 
 
 @make_route(
+    input_args=user.User,
+    output_args=user.User
+)
+async def format(request:Request, **kwargs) -> dict:
+    return {
+        'firstname': kwargs['firstname'].capitalize(),
+        'middlename': kwargs['middlename'].capitalize(),
+        'lastname': kwargs['lastname'].capitalize(),
+    }
+
+
+@make_route(
     output_args=user.User
 )
 async def get_current(request: Request) -> dict:
