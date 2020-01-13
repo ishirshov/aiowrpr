@@ -14,7 +14,8 @@ from marshmallow import fields
     },
     output_args={
         'b': fields.Int()
-    }
+    },
+    method_types=routes.GET
 )
 async def pow2(a: int, request: web.Request) -> int:
     return a ** 2

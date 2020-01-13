@@ -20,12 +20,14 @@ from functools import partial
 import ujson
 
 from aiohttp import web
-from marshmallow import Schema
 from webargs import aiohttpparser
 from webargs import dict2schema
 
 ROUTE_TABLE = []
 JSON_RESPONSE = partial(web.json_response, dumps=ujson.dumps)
+
+GET = 1 << 0
+POST = 1 << 1
 
 
 def __to_camel(method_name: str) -> str:
@@ -67,7 +69,8 @@ def __url_path_format(version_id: str, resource_name: str, method_name: str) -> 
 
 def make_route(input_args: dict = None, output_args: dict = None,
                locations: tuple = None, validate: object = None,
-               path: str = None, auth_required: callable = None):
+               path: str = None, auth_required: callable = None,
+               method_types: int = None):
     """
     Functions makes the route for
     wrapped function.
@@ -77,8 +80,12 @@ def make_route(input_args: dict = None, output_args: dict = None,
     :param validate: Validator of full scheme
     :param path: Stringify path of decorated async function
     :param auth_required: This functions checks credential information inside request headers
+    :param method_types: This flags indicates about methods for specific endpoint
     :return: callable
     """
+    if not isinstance(method_types, int):
+        method_types = GET | POST
+
     # Prepare dumper for outgoing data
     # if not (isinstance(output_args, dict) or isinstance(output_args, list)):
     #    output_args = {'result': fields.List(fields.Str(), missing=[])}
@@ -162,12 +169,14 @@ def make_route(input_args: dict = None, output_args: dict = None,
             endpoint_path = "/{0}.{1}".format(resource_path, method_name)
 
         # Add coroutine wrapper inside the webapp
-        ROUTE_TABLE.extend(
-            [
-                web.get(endpoint_path, coro_wrapper, allow_head=False),
-                web.post(endpoint_path, coro_wrapper),
-            ]
-        )
+        if (method_types & GET) == GET:
+            ROUTE_TABLE.append(
+                web.get(endpoint_path, coro_wrapper, allow_head=False)
+            )
+        if (method_types & POST) == POST:
+            ROUTE_TABLE.append(
+                web.post(endpoint_path, coro_wrapper)
+            )
 
         return coro_wrapper
 
