@@ -19,6 +19,9 @@ from functools import partial
 
 import ujson
 
+from aiohttp_apispec import docs
+from aiohttp_apispec import request_schema
+from aiohttp_apispec import response_schema
 from aiohttp import web
 from webargs import aiohttpparser
 from webargs import dict2schema
@@ -177,6 +180,16 @@ def make_route(input_args: dict = None, output_args: dict = None,
             ROUTE_TABLE.append(
                 web.post(endpoint_path, coro_wrapper)
             )
+
+        if fn_.__doc__:
+            coro_wrapper = docs(
+                tags=[resource_path.split('/')[-1]], summary=fn_.__doc__
+            )(coro_wrapper)
+
+            if schema:
+                coro_wrapper = response_schema(schema)(coro_wrapper)
+            if input_args:
+                coro_wrapper = request_schema(input_args)(coro_wrapper)
 
         return coro_wrapper
 

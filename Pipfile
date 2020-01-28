@@ -10,6 +10,7 @@ twine = "*"
 
 [packages]
 aiohttp = {extras = ["speedups"],version = "*"}
+aiohttp-apispec = "*"
 marshmallow = "*"
 webargs = "*"
 ujson = "*"
