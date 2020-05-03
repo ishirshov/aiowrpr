@@ -68,6 +68,7 @@ setup(
     author_email='ildar.shirshov@gmail.com',
     license=aiowrpr.__license__,
     packages=find_packages(),
+    scripts=['bin/make_api'],
     entry_points={
         'console_scripts': [
             'http = httpie.__main__:main',

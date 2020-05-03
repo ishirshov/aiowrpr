@@ -60,13 +60,14 @@ async def loads_json(
 
 
 async def make_request(
-    url: str, params=None, headers=None, method: str = hdrs.METH_GET
+    url: str, data=None, params=None, headers=None, method: str = hdrs.METH_GET
 ) -> Optional[JSONCompatible]:
     """
     Function makes the request
     with specific url and data query.
     :param url: base url
-    :param params: parameter for query
+    :param data: to send it in the body of the request
+    :param params: parameters to be send in querystring or json
     :param headers: as is
     :param method: possible methods POST, GET
     :return: json structure data
@@ -78,8 +79,8 @@ async def make_request(
         headers = dict()
 
     kwargs = {
-        hdrs.METH_POST: {'json': params, 'headers': headers},
-        hdrs.METH_GET: {'params': params, 'headers': headers},
+        hdrs.METH_POST: {'data': data, 'json': params, 'headers': headers},
+        hdrs.METH_GET: {'data': data, 'params': params, 'headers': headers},
     }[method]
 
     async with ClientSession() as session:
