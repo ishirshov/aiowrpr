@@ -11,7 +11,7 @@ import aiowrpr
 
 INSTALL_REQUIRES = [
     'aiodns==2.0.0',
-    'aiohttp[speedups]==3.6.2',
+    'aiohttp[speedups]>=3.7.4',
     'aiohttp-apispec==2.1.0',
     'apispec==3.2.0',
     'async-timeout==3.0.1',
