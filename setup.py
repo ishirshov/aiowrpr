@@ -26,7 +26,7 @@ INSTALL_REQUIRES = [
     'pycares==3.1.0',
     'pycparser==2.19',
     'ujson==1.35',
-    'webargs==5.5.2',
+    'webargs>=5.5.3',
     'yarl==1.4.2'
 ]
 
